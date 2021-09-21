@@ -7,6 +7,12 @@ module.exports = (sequelize, DataTypes) => {
     avatar: DataTypes.STRING,
     account: DataTypes.STRING,
     cover: DataTypes.STRING,
+    role: DataTypes.STRING,
+    isAdmin: DataTypes.STRING,
+    //加入 isNoticed 欄位
+    isNoticed: DataTypes.BOOLEAN,
+    //補加入 introduction 欄位
+    introduction: DataTypes.STRING
   }, {});
   User.associate = function (models) {
     User.hasMany(models.Reply)
@@ -21,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
       through: models.Followship,
       foreignKey: 'followerId',
       as: 'Followings'
+    })
+    // 加入關聯 - 阿金
+    User.belongsToMany(models.Tweet, {
+      through: models.Like,
+      foreignKey: 'UserId',
+      as: 'LikedTweet'
     })
   };
   return User;
